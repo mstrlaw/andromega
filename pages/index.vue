@@ -137,7 +137,11 @@
           let speechToText = event.results[event.results.length - 1][0].transcript
           console.log('finished StT processing')
 
-          if (speechToText === 'clear messages') {
+          if (speechToText === 'clear messages' || speechToText === 'reset messages' || speechToText === 'reset room') {
+            this.messagesList = [{
+              text: 'Hello, type in something or speak to your microphone (Chrome only)',
+              timestamp: moment().valueOf()
+            }]
             this.clearMessages()
           } else {
             this.updateMessages({
