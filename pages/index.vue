@@ -137,17 +137,17 @@
           let speechToText = event.results[event.results.length - 1][0].transcript
           console.log('finished StT processing')
 
-          this.messagesList.push({
-            text: speechToText,
-            timestamp: moment().valueOf()
-          })
+          if (speechToText === 'clear messages') {
+            this.clearMessages()
+          } else {
+            this.updateMessages({
+              text: speechToText,
+              timestamp: moment().valueOf()
+            })
 
-          this.updateMessages({
-            text: speechToText,
-            timestamp: moment().valueOf()
-          })
+            this.saveMessages()
+          }
 
-          this.saveMessages()
           
           // this.socket.emit('NEW_MESSAGE', {
           //   text: speechToText,
@@ -223,6 +223,14 @@
         this.recognition.listening = false
         this.listening = false
         this.speaking = !fullStop
+      },
+      clearMessages() {
+        this.$axios.$put(`${ process.env.JSONBIN_ENDPOINT }/b/${ process.env.BIN_ID }`, [null], {
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .catch( err => {
+          console.log(err)
+        })
       },
       saveMessages() {
         this.$axios.$put(`${ process.env.JSONBIN_ENDPOINT }/b/${ process.env.BIN_ID }`, this.messagesList, {
