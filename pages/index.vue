@@ -83,7 +83,10 @@
       return {
         newMessage: '',
         socket: null,
-        messagesList: [],
+        messagesList: [{
+          text: 'Loading messages..',
+          timestamp: moment().valueOf()
+        }],
         sceneElements: '',
         activePanel: 'chat',
         listening: false,
@@ -171,10 +174,18 @@
       */
       submitMessage() {
         if (this.newMessage.trim().length > 0) {
-          this.socket.emit('NEW_MESSAGE', {
+          
+          this.updateMessages({
             text: this.newMessage,
             timestamp: moment().valueOf()
           })
+
+          this.saveMessages()
+
+          // this.socket.emit('NEW_MESSAGE', {
+          //   text: this.newMessage,
+          //   timestamp: moment().valueOf()
+          // })
           this.newMessage = ''
           this.$refs.messageInput.focus()
         }
@@ -244,11 +255,10 @@
           console.log(err)
         })
       },
-      async loadMessages() {
-        let data = await this.$axios.$get(`${ process.env.JSONBIN_ENDPOINT }/b/${ process.env.BIN_ID }/latest`)
-        // headers: { 'secret-key': process.env.JSONBIN_KEY }
-
-        this.messagesList = data
+      loadMessages() {
+        this.$axios.$get(`${ process.env.JSONBIN_ENDPOINT }/b/${ process.env.BIN_ID }/latest`).then( data => {
+          this.messagesList = data
+        })
       }
     },
 
