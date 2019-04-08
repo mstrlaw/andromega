@@ -142,6 +142,11 @@
             timestamp: moment().valueOf()
           })
 
+          this.updateMessages({
+            text: speechToText,
+            timestamp: moment().valueOf()
+          })
+
           this.saveMessages()
           
           // this.socket.emit('NEW_MESSAGE', {
@@ -230,8 +235,6 @@
       async loadMessages() {
         let data = await this.$axios.$get(`${ process.env.JSONBIN_ENDPOINT }/b/${ process.env.BIN_ID }/latest`)
         // headers: { 'secret-key': process.env.JSONBIN_KEY }
-
-        console.log(data)
 
         this.messagesList = data
       }
