@@ -54,7 +54,14 @@ module.exports = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
   },
-
+  /*
+  ** Env config for Netlify
+  */
+  env: {
+    SOCKET_ENDPOINT: process.env.SOCKET_ENDPOINT,
+    JSONBIN_ENDPOINT: process.env.JSONBIN_ENDPOINT,
+    BIN_ID: process.env.BIN_ID
+  },
   /*
   ** Build configuration
   */
